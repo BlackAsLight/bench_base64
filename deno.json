@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "build": "wat2wasm wat_encoder.wat -o wat_encoder.wasm",
+    "opt": "deno task build && wasm-opt wat_encoder.wasm -o wat_encoder_opt.wasm -Oz --enable-simd",
+    "test": "deno task opt && deno test main.ts",
+    "bench": "deno task opt && deno bench main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.14"
+  }
+}

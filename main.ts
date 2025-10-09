@@ -60,27 +60,79 @@ Deno.test("WatSIMDEncodeOpt", function () {
 for (let i = 0; i <= 24; ++i) {
   const input = new Uint8Array(2 ** i - 1).map(() => Math.random() * 256);
 
-  Deno.bench("Native", { group: `Len:${2 ** i - 1}` }, function () {
+  Deno.bench("Native", { group: `Len:${2 ** i - 1}|Buffer` }, function () {
     encode(input.toBase64());
   });
 
-  Deno.bench("JSEncode", { group: `Len:${2 ** i - 1}` }, function () {
+  Deno.bench("JSEncode", { group: `Len:${2 ** i - 1}|Buffer` }, function () {
     JSEncode(input);
   });
 
-  Deno.bench("WatEncode", { group: `Len:${2 ** i - 1}` }, function () {
+  Deno.bench("WatEncode", { group: `Len:${2 ** i - 1}|Buffer` }, function () {
     WatEncode(input);
   });
 
-  Deno.bench("WatSIMDEncode", { group: `Len:${2 ** i - 1}` }, function () {
-    WatSIMDEncode(input);
+  Deno.bench(
+    "WatSIMDEncode",
+    { group: `Len:${2 ** i - 1}|Buffer` },
+    function () {
+      WatSIMDEncode(input);
+    },
+  );
+
+  Deno.bench(
+    "WatEncodeOpt",
+    { group: `Len:${2 ** i - 1}|Buffer` },
+    function () {
+      WatEncodeOpt(input);
+    },
+  );
+
+  Deno.bench(
+    "WatSIMDEncodeOpt",
+    { group: `Len:${2 ** i - 1}|Buffer` },
+    function () {
+      WatSIMDEncodeOpt(input);
+    },
+  );
+}
+
+for (let i = 0; i <= 24; ++i) {
+  const input = new Uint8Array(2 ** i - 1).map(() => Math.random() * 256);
+
+  Deno.bench("Native", { group: `Len:${2 ** i - 1}|String` }, function () {
+    input.toBase64();
   });
 
-  Deno.bench("WatEncodeOpt", { group: `Len:${2 ** i - 1}` }, function () {
-    WatEncodeOpt(input);
+  Deno.bench("JSEncode", { group: `Len:${2 ** i - 1}|String` }, function () {
+    decode(JSEncode(input));
   });
 
-  Deno.bench("WatSIMDEncodeOpt", { group: `Len:${2 ** i - 1}` }, function () {
-    WatSIMDEncodeOpt(input);
+  Deno.bench("WatEncode", { group: `Len:${2 ** i - 1}|String` }, function () {
+    decode(WatEncode(input));
   });
+
+  Deno.bench(
+    "WatSIMDEncode",
+    { group: `Len:${2 ** i - 1}|String` },
+    function () {
+      decode(WatSIMDEncode(input));
+    },
+  );
+
+  Deno.bench(
+    "WatEncodeOpt",
+    { group: `Len:${2 ** i - 1}|String` },
+    function () {
+      decode(WatEncodeOpt(input));
+    },
+  );
+
+  Deno.bench(
+    "WatSIMDEncodeOpt",
+    { group: `Len:${2 ** i - 1}|String` },
+    function () {
+      decode(WatSIMDEncodeOpt(input));
+    },
+  );
 }

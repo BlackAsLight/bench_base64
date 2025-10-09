@@ -1,4 +1,4 @@
-This repo contains a few implementations of a base64 encoder and compares their performance to the native `[Uint8Array.toBase64()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64)`.
+This repo contains a few implementations of a base64 encoder and compares their performance to the native [`Uint8Array.toBase64()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64).
 
 Since `Uint8Array.toBase64()` returns a string result, this benchmark compares the performance of a string and a uint8array as the desired result.
 

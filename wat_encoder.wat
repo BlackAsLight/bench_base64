@@ -18,7 +18,6 @@
     (local $x1 v128)
     (local $x2 v128)
     (local $x3 v128)
-    (local $x4 v128)
     (local $len i32)
 
     (local.set $o (i32.const 64))
@@ -32,7 +31,7 @@
 
       (;;) (i8x16.shuffle 6 5 4 0 9 8 7 0 12 11 10 0 15 14 13 0
         (local.get $x3)
-        (local.get $x4)
+        (v128.const i64x2 0 0)
       )
       (;;) (i8x16.shuffle 10 9 8 0 13 12 11 0 16 15 14 0 19 18 17 0
         (local.get $x2)

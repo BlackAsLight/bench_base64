@@ -76,70 +76,37 @@
     )
     (local.set $x (v128.or (v128.or (;;) (;;)) (v128.or (;;) (;;))))
 
-    (i32.store8
-      (local.get $o)
-      (i32.load8_u (i8x16.extract_lane_u 0 (local.get $x)))
+    (;;) (local.get $o)
+
+    (;;) (v128.and
+      (i8x16.lt_u (local.get $x) (i8x16.splat (i32.const 26)))
+      (i8x16.add (local.get $x) (i8x16.splat (i32.const 65)))
     )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 1))
-      (i32.load8_u (i8x16.extract_lane_u 1 (local.get $x)))
+    (;;) (v128.and
+      (v128.and
+        (i8x16.ge_u (local.get $x) (i8x16.splat (i32.const 26)))
+        (i8x16.lt_u (local.get $x) (i8x16.splat (i32.const 52)))
+      )
+      (i8x16.add (local.get $x) (i8x16.splat (i32.const 71)))
     )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 2))
-      (i32.load8_u (i8x16.extract_lane_u 2 (local.get $x)))
+    (;;) (v128.and
+      (v128.and
+        (i8x16.ge_u (local.get $x) (i8x16.splat (i32.const 52)))
+        (i8x16.lt_u (local.get $x) (i8x16.splat (i32.const 62)))
+      )
+      (i8x16.sub (local.get $x) (i8x16.splat (i32.const 4)))
     )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 3))
-      (i32.load8_u (i8x16.extract_lane_u 3 (local.get $x)))
+    (;;) (v128.and
+      (i8x16.eq (local.get $x) (i8x16.splat (i32.const 62)))
+      (i8x16.splat (i32.const 43))
     )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 4))
-      (i32.load8_u (i8x16.extract_lane_u 4 (local.get $x)))
+    (;;) (v128.and
+      (i8x16.eq (local.get $x) (i8x16.splat (i32.const 63)))
+      (i8x16.splat (i32.const 47))
     )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 5))
-      (i32.load8_u (i8x16.extract_lane_u 5 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 6))
-      (i32.load8_u (i8x16.extract_lane_u 6 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 7))
-      (i32.load8_u (i8x16.extract_lane_u 7 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 8))
-      (i32.load8_u (i8x16.extract_lane_u 8 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 9))
-      (i32.load8_u (i8x16.extract_lane_u 9 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 10))
-      (i32.load8_u (i8x16.extract_lane_u 10 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 11))
-      (i32.load8_u (i8x16.extract_lane_u 11 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 12))
-      (i32.load8_u (i8x16.extract_lane_u 12 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 13))
-      (i32.load8_u (i8x16.extract_lane_u 13 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 14))
-      (i32.load8_u (i8x16.extract_lane_u 14 (local.get $x)))
-    )
-    (i32.store8
-      (i32.add (local.get $o) (i32.const 15))
-      (i32.load8_u (i8x16.extract_lane_u 15 (local.get $x)))
-    )
+    (;;) (v128.or (v128.or (;;) (;;)) (v128.or (;;) (v128.or (;;) (;;))))
+
+    (v128.store (;;) (;;))
 
     (;;) (i32.add (local.get $o) (i32.const 16))
   )

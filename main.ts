@@ -13,9 +13,9 @@ const decode = function () {
   const decoder = new TextDecoder();
   return decoder.decode.bind(decoder);
 }();
-const encode = function () {
+const [encode, encodeInto] = function () {
   const encoder = new TextEncoder();
-  return encoder.encode.bind(encoder);
+  return [encoder.encode.bind(encoder), encoder.encodeInto.bind(encoder)];
 }();
 
 Deno.test("JSEncode", function () {
@@ -61,7 +61,10 @@ for (let i = 0; i <= 24; ++i) {
   const input = new Uint8Array(2 ** i - 1).map(() => Math.random() * 256);
 
   Deno.bench("Native", { group: `Len:${2 ** i - 1}|Buffer` }, function () {
-    encode(input.toBase64());
+    encodeInto(
+      input.toBase64(),
+      new Uint8Array(((input.length + 2) / 3 | 0) * 4),
+    );
   });
 
   Deno.bench("JSEncode", { group: `Len:${2 ** i - 1}|Buffer` }, function () {

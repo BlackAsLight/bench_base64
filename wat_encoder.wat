@@ -46,10 +46,12 @@
         (v128.const i64x2 0 0)
       )
 
-      (local.set $o (call $encodeSIMD (;;) (local.get $o)))
-      (local.set $o (call $encodeSIMD (;;) (local.get $o)))
-      (local.set $o (call $encodeSIMD (;;) (local.get $o)))
-      (local.set $o (call $encodeSIMD (;;) (local.get $o)))
+      (;;) (local.get $o)
+      (;;) (call $encodeSIMD (;;) (;;))
+      (;;) (call $encodeSIMD (;;) (;;))
+      (;;) (call $encodeSIMD (;;) (;;))
+      (;;) (call $encodeSIMD (;;) (;;))
+      (local.set $o (;;))
 
       (br $next)
     )))
@@ -58,6 +60,9 @@
   )
 
   (func $encodeSIMD (param $x v128) (param $o i32) (result i32)
+    (;;) (i32.add (local.get $o) (i32.const 16))
+    (;;) (local.get $o)
+
     (;;) (v128.and
       (i32x4.shr_u (local.get $x) (i32.const 18))
       (v128.const i32x4 0x3F 0x3F 0x3F 0x3F)
@@ -74,12 +79,10 @@
       (i32x4.shl (local.get $x) (i32.const 24))
       (v128.const i32x4 0x3F000000 0x3F000000 0x3F000000 0x3F000000)
     )
-    (local.set $x (v128.or (v128.or (;;) (;;)) (v128.or (;;) (;;))))
-
-    (;;) (local.get $o)
+    (;;) (local.tee $x (v128.or (v128.or (;;) (;;)) (v128.or (;;) (;;))))
 
     (;;) (v128.and
-      (i8x16.lt_u (local.get $x) (i8x16.splat (i32.const 26)))
+      (i8x16.lt_u (;;) (i8x16.splat (i32.const 26)))
       (i8x16.add (local.get $x) (i8x16.splat (i32.const 65)))
     )
     (;;) (v128.and
@@ -107,8 +110,6 @@
     (;;) (v128.or (v128.or (;;) (;;)) (v128.or (;;) (v128.or (;;) (;;))))
 
     (v128.store (;;) (;;))
-
-    (;;) (i32.add (local.get $o) (i32.const 16))
   )
 
   (func $encode (param $i i32) (param $o i32) (result i32)
@@ -117,102 +118,75 @@
     (local.set $i (i32.add (local.get $i) (i32.const 2)))
 
     (loop $next (if (i32.lt_u (local.get $i) (global.get $len)) (then
-      (;;) (i32.load8_u (i32.sub (local.get $i) (i32.const 2)))
-      (;;) (i32.shl (;;) (i32.const 16))
-      (;;) (i32.load8_u (i32.sub (local.get $i) (i32.const 1)))
-      (;;) (i32.shl (;;) (i32.const 8))
-      (;;) (i32.load8_u (local.get $i))
+      (;;) (local.get $o)
+      (local.set $o (i32.add (local.get $o) (i32.const 4)))
+
+      (;;) (local.tee $x (i32.load (i32.sub (local.get $i) (i32.const 3))))
+      (;;) (i32.and (i32.shl (;;) (i32.const 8)) (i32.const 0xFF0000))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 8)) (i32.const 0xFF00))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 24)) (i32.const 0xFF))
       (;;) (i32.or (;;) (i32.or (;;) (;;)))
-      (local.set $x (;;))
+      (;;) (local.tee $x (;;))
+
       (local.set $i (i32.add (local.get $i) (i32.const 3)))
 
-      (i32.store8
-        (local.get $o)
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 18)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 1))
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 2))
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 6)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 3))
-        (i32.load8_u (i32.and (local.get $x) (i32.const 63)))
-      )
+      (;;) (i32.and (i32.shr_u (;;) (i32.const 18)) (i32.const 0x3F))
+      (;;) (i32.load8_u (;;))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 8))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 6)) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 16))
+      (;;) (i32.and (local.get $x) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 24))
+      (;;) (i32.or (i32.or (;;) (;;)) (i32.or (;;) (;;)))
 
-      (local.set $o (i32.add (local.get $o) (i32.const 4)))
+      (i32.store (;;) (;;))
       (br $next)
     )))
 
     (if (i32.eq (local.get $i) (i32.add (global.get $len) (i32.const 1))) (then
-      (;;) (i32.load8_u (i32.sub (local.get $i) (i32.const 2)))
-      (;;) (i32.shl (;;) (i32.const 16))
-      (local.set $x (;;))
+      (;;) (i32.add (local.get $o) (i32.const 4))
+      (;;) (local.get $o)
 
-      (i32.store8
-        (local.get $o)
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 18)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 1))
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 2))
-        (global.get $padding)
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 3))
-        (global.get $padding)
-      )
+      (;;) (i32.load (i32.sub (global.get $len) (i32.const 4)))
+      (;;) (i32.and (i32.shr_u (;;) (i32.const 8)) (i32.const 0xFF0000))
+      (;;) (local.tee $x (;;))
 
-      (return (i32.add (local.get $o) (i32.const 4)))
+      (;;) (i32.and (i32.shr_u (;;) (i32.const 18)) (i32.const 0x3F))
+      (;;) (i32.load8_u (;;))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 8))
+      (;;) (i32.shl (global.get $padding) (i32.const 16))
+      (;;) (i32.shl (global.get $padding) (i32.const 24))
+      (;;) (i32.or (i32.or (;;) (;;)) (i32.or (;;) (;;)))
+
+      (i32.store (;;) (;;))
+
+      (return (;;))
     ))
     (if (i32.eq (local.get $i) (global.get $len)) (then
-      (;;) (i32.load8_u (i32.sub (local.get $i) (i32.const 2)))
-      (;;) (i32.shl (;;) (i32.const 16))
-      (;;) (i32.load8_u (i32.sub (local.get $i) (i32.const 1)))
-      (;;) (i32.shl (;;) (i32.const 8))
+      (;;) (i32.add (local.get $o) (i32.const 4))
+      (;;) (local.get $o)
+
+      (;;) (local.tee $x (i32.load (i32.sub (global.get $len) (i32.const 4))))
+      (;;) (i32.and (;;) (i32.const 0xFF0000))
+      (;;) (i32.shr_u (local.get $x) (i32.const 16))
+      (;;) (i32.and (;;) (i32.const 0xFF00))
       (;;) (i32.or (;;) (;;))
-      (local.set $x (;;))
+      (;;) (local.tee $x (;;))
 
-      (i32.store8
-        (local.get $o)
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 18)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 1))
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 2))
-        (i32.load8_u
-          (i32.and (i32.shr_u (local.get $x) (i32.const 6)) (i32.const 63))
-        )
-      )
-      (i32.store8
-        (i32.add (local.get $o) (i32.const 3))
-        (global.get $padding)
-      )
+      (;;) (i32.and (i32.shr_u (;;) (i32.const 18)) (i32.const 0x3F))
+      (;;) (i32.load8_u (;;))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 12)) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 8))
+      (;;) (i32.and (i32.shr_u (local.get $x) (i32.const 6)) (i32.const 0x3F))
+      (;;) (i32.shl (i32.load8_u (;;)) (i32.const 16))
+      (;;) (i32.shl (global.get $padding) (i32.const 24))
+      (;;) (i32.or (i32.or (;;) (;;)) (i32.or (;;) (;;)))
 
-      (return (i32.add (local.get $o) (i32.const 4)))
+      (i32.store (;;) (;;))
+
+      (return (;;))
     ))
 
     (;;) (local.get $o)
